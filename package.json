@@ -1,0 +1,18 @@
+{
+  "name": "obsidian-flux",
+  "version": "1.0.0",
+  "browserslist": [
+    "last 3 versions"
+  ],
+  "author": "Joseph Hopson",
+  "license": "MIT",
+  "private": true,
+  "description": "A tool for transferring Obsidian content directly into Foundry VTT journals",
+  "scripts": {
+    "build": "sass src/scss/obsidian-flux.scss css/obsidian-flux.css --style=expanded --no-source-map",
+    "watch": "sass src/scss/obsidian-flux.scss css/obsidian-flux.css --style=expanded --source-map --watch"
+  },
+  "devDependencies": {
+    "sass": "^1.53.0"
+  }
+}

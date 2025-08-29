@@ -1,0 +1,43 @@
+{
+  "id": "obsidian-flux",
+  "title": "Obsidian Flux", 
+  "description": "A tool for transferring Obsidian content directly into Foundry VTT journals",
+  "version": "#{VERSION}#",
+  "compatibility": {
+    "minimum": 12,
+    "verified": 13.347,
+    "maximum": 13
+  },
+  "authors": [
+    {
+      "name": "ephson",
+      "url": "https://github.com/philote",
+      "discord": "ephson",
+      "reddit": "u/ephson"
+    }
+  ],
+  "flags": {
+    "hotReload": {
+      "extensions": ["css", "html", "hbs", "json"],
+      "paths": ["css", "lang", "templates"]
+    }
+  },
+  "esmodules": [
+    "module/index.js"
+  ],
+  "styles": [
+    "css/obsidian-flux.css"
+  ],
+  "languages": [
+    {
+      "lang": "en", 
+      "name": "English", 
+      "path": "lang/en.json"
+    }
+  ],
+  "url": "#{URL}#",
+  "manifest": "#{MANIFEST}#",
+  "download": "#{DOWNLOAD}#",
+  "license": "LICENSE",
+  "readme": "README.md"
+}
