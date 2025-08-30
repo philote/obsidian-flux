@@ -1,5 +1,5 @@
 /**
- * Journal Management for Lava Flow module
+ * Journal Management for Obsidian Flux module
  * Handles FoundryVTT Journal Entry and Page CRUD operations
  */
 export class JournalManager {

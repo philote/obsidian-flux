@@ -1,5 +1,5 @@
 /**
- * Centralized logging utility for Lava Flow module
+ * Centralized logging utility for Obsidian Flux module
  * Provides consistent logging with optional UI notifications
  */
 export class Logger {
@@ -36,6 +36,6 @@ export class Logger {
    * @returns {string} Formatted message
    */
   static toLogMessage(msg) {
-    return `Lava Flow | ${msg}`;
+    return `Obsidian Flux | ${msg}`;
   }
 }

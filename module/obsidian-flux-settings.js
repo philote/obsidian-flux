@@ -1,13 +1,13 @@
-import LavaFlow from './lava-flow.js';
+import ObsidianFlux from './obsidian-flux.js';
 
-export class LavaFlowSettings {
+export class ObsidianFluxSettings {
   constructor() {
     this.rootFolderName = null;
     this.vaultFiles = null;
     this.imageDirectory = null;
     this.overwrite = true;
     this.ignoreDuplicate = false;
-    this.idPrefix = `${LavaFlow.ID}-`;
+    this.idPrefix = `${ObsidianFlux.ID}-`;
     this.playerObserve = false;
     this.createIndexFile = false;
     this.createBacklinks = true;

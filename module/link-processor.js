@@ -2,7 +2,7 @@ import { MDFileInfo, OtherFileInfo } from './file-info.js';
 import { JournalManager } from './journal-manager.js';
 
 /**
- * Link Processing for Lava Flow module
+ * Link Processing for Obsidian Flux module
  * Handles cross-reference links and backlink generation
  */
 export class LinkProcessor {

@@ -1,4 +1,4 @@
-import LavaFlow from './lava-flow.js';
+import ObsidianFlux from './obsidian-flux.js';
 
 export async function createOrGetFolder(folderName, parentFolderID = null) {
   if (folderName == null || folderName === '') return null;
@@ -24,6 +24,6 @@ export async function createFolder(folderName, parentFolderID) {
     type: 'JournalEntry',
     folder: parentFolderID,
   });
-  await folder?.setFlag(LavaFlow.FLAGS.SCOPE, LavaFlow.FLAGS.FOLDER, true);
+  await folder?.setFlag(ObsidianFlux.FLAGS.SCOPE, ObsidianFlux.FLAGS.FOLDER, true);
   return folder ?? null;
 }

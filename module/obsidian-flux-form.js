@@ -1,9 +1,9 @@
-import LavaFlow from './lava-flow.js';
-import { LavaFlowSettings } from './lava-flow-settings.js';
+import ObsidianFlux from './obsidian-flux.js';
+import { ObsidianFluxSettings } from './obsidian-flux-settings.js';
 
-export class LavaFlowForm extends FormApplication {
+export class ObsidianFluxForm extends FormApplication {
   constructor() {
-    super(LavaFlowForm.defaultOptions);
+    super(ObsidianFluxForm.defaultOptions);
     this.vaultFiles = null;
   }
 
@@ -12,12 +12,12 @@ export class LavaFlowForm extends FormApplication {
 
     const overrides = {
       height: 600,
-      id: `${LavaFlow.ID}-form`,
-      template: LavaFlow.TEMPLATES.IMPORTDIAG,
+      id: `${ObsidianFlux.ID}-form`,
+      template: ObsidianFlux.TEMPLATES.IMPORTDIAG,
       title: 'Import Obsidian MD Vault',
       importSettings:
-        game.user?.getFlag(LavaFlow.FLAGS.SCOPE, LavaFlow.FLAGS.LASTSETTINGS) ??
-        new LavaFlowSettings(),
+        game.user?.getFlag(ObsidianFlux.FLAGS.SCOPE, ObsidianFlux.FLAGS.LASTSETTINGS) ??
+        new ObsidianFluxSettings(),
       classes: [],
       closeOnSubmit: true,
       submitOnChange: false,
@@ -45,7 +45,7 @@ export class LavaFlowForm extends FormApplication {
 
   async _updateObject(event, formData) {
     formData.vaultFiles = this.vaultFiles;
-    await LavaFlow.importVault(event, formData);
+    await ObsidianFlux.importVault(event, formData);
   }
 
   getData(options) {
@@ -53,7 +53,7 @@ export class LavaFlowForm extends FormApplication {
   }
 
   activateListeners() {
-    const prefix = LavaFlowForm.defaultOptions?.importSettings?.idPrefix ?? '';
+    const prefix = ObsidianFluxForm.defaultOptions?.importSettings?.idPrefix ?? '';
 
     this.setInverseToggle(`#${prefix}overwrite`, `#${prefix}ignoreDuplicateDiv`);
     this.setToggle(`#${prefix}importNonMarkdown`, `#${prefix}nonMarkdownOptions`);

@@ -1,9 +1,9 @@
-import LavaFlow from './lava-flow.js';
+import ObsidianFlux from './obsidian-flux.js';
 
 Hooks.on('renderJournalDirectory', function (app, html) {
   try {
-    LavaFlow.createUIElements(html);
+    ObsidianFlux.createUIElements(html);
   } catch (e) {
-    LavaFlow.errorHandling(e);
+    ObsidianFlux.errorHandling(e);
   }
 });

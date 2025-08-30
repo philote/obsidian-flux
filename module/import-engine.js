@@ -1,20 +1,20 @@
 import { FileInfo, MDFileInfo, OtherFileInfo } from './file-info.js';
 import { FolderInfo } from './folder-info.js';
-import { LavaFlowSettings } from './lava-flow-settings.js';
+import { ObsidianFluxSettings } from './obsidian-flux-settings.js';
 import { createOrGetFolder } from './util.js';
 import { Logger } from './logger.js';
 import { JournalManager } from './journal-manager.js';
 import { LinkProcessor } from './link-processor.js';
 
 /**
- * Core Import Engine for Lava Flow module
+ * Core Import Engine for Obsidian Flux module
  * Handles the main import workflow and file processing
  */
 export class ImportEngine {
   /**
    * Main import vault workflow
    * @param {Event} event - Triggering event
-   * @param {LavaFlowSettings} settings - Import settings
+   * @param {ObsidianFluxSettings} settings - Import settings
    * @param {Object} moduleFlags - Module flags for identification
    * @param {Function} isGMFn - Function to check if user is GM
    */
@@ -84,11 +84,11 @@ export class ImportEngine {
 
   /**
    * Save import settings for future use
-   * @param {LavaFlowSettings} settings - Settings to save
+   * @param {ObsidianFluxSettings} settings - Settings to save
    * @param {Object} moduleFlags - Module flags
    */
   static async saveSettings(settings, moduleFlags) {
-    const savedSettings = new LavaFlowSettings();
+    const savedSettings = new ObsidianFluxSettings();
     Object.assign(savedSettings, settings);
     savedSettings.vaultFiles = null;
     await game.user?.setFlag(moduleFlags.SCOPE, moduleFlags.LASTSETTINGS, savedSettings);
@@ -97,7 +97,7 @@ export class ImportEngine {
   /**
    * Import a folder and its contents
    * @param {FolderInfo} folder - Folder to import
-   * @param {LavaFlowSettings} settings - Import settings
+   * @param {ObsidianFluxSettings} settings - Import settings
    * @param {Folder|null} parentFolder - Parent FoundryVTT folder
    * @param {Object} moduleFlags - Module flags
    */
@@ -139,7 +139,7 @@ export class ImportEngine {
   /**
    * Import a single file
    * @param {FileInfo} file - File to import
-   * @param {LavaFlowSettings} settings - Import settings
+   * @param {ObsidianFluxSettings} settings - Import settings
    * @param {Folder|null} rootFolder - Root folder
    * @param {JournalEntry|null} parentJournal - Parent journal entry
    * @param {Object} moduleFlags - Module flags
@@ -155,7 +155,7 @@ export class ImportEngine {
   /**
    * Import a markdown file as journal entry
    * @param {MDFileInfo} file - Markdown file to import
-   * @param {LavaFlowSettings} settings - Import settings
+   * @param {ObsidianFluxSettings} settings - Import settings
    * @param {Folder|null} parentFolder - Parent folder
    * @param {JournalEntry|null} parentJournal - Parent journal entry
    * @param {Object} moduleFlags - Module flags
@@ -182,7 +182,7 @@ export class ImportEngine {
   /**
    * Import a non-markdown file (typically images)
    * @param {OtherFileInfo} file - File to import
-   * @param {LavaFlowSettings} settings - Import settings
+   * @param {ObsidianFluxSettings} settings - Import settings
    */
   static async importOtherFile(file, settings) {
     const source = settings.useS3 ? 's3' : 'data';
@@ -193,7 +193,7 @@ export class ImportEngine {
 
   /**
    * Validate upload location exists or can be created
-   * @param {LavaFlowSettings} settings - Import settings
+   * @param {ObsidianFluxSettings} settings - Import settings
    */
   static async validateUploadLocation(settings) {
     if (settings.useS3) {
@@ -212,7 +212,7 @@ export class ImportEngine {
 
   /**
    * Create an index file listing all imported content
-   * @param {LavaFlowSettings} settings - Import settings
+   * @param {ObsidianFluxSettings} settings - Import settings
    * @param {FileInfo[]} files - Imported files
    * @param {Folder|null} rootFolder - Root folder
    * @param {Object} moduleFlags - Module flags

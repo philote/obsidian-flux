@@ -1,8 +1,8 @@
 import { Logger } from './logger.js';
-import { LavaFlowForm } from './lava-flow-form.js';
+import { ObsidianFluxForm } from './obsidian-flux-form.js';
 
 /**
- * UI Management for Lava Flow module
+ * UI Management for Obsidian Flux module
  * Handles FoundryVTT UI element creation and version-specific rendering
  */
 export class UIManager {
@@ -11,7 +11,7 @@ export class UIManager {
    * @param {HTMLElement|JQuery} html - The HTML element to modify
    * @param {string} moduleId - Module ID for button styling
    */
-  static createUIElements(html, moduleId = 'lava-flow') {
+  static createUIElements(html, moduleId = 'obsidian-flux') {
     if (!UIManager.isGM()) return;
 
     Logger.log('Creating UI elements...', false);
@@ -34,7 +34,7 @@ export class UIManager {
    */
   static createForm() {
     if (!UIManager.isGM()) return;
-    new LavaFlowForm().render(true);
+    new ObsidianFluxForm().render(true);
   }
 
   /**
