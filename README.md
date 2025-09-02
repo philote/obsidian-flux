@@ -28,7 +28,7 @@
 
 ### A tool for transferring Obsidian content directly into Foundry VTT journals
 
-Obsidian Flux is a comprehensive FoundryVTT module that seamlessly imports your entire Obsidian vault directly into Foundry VTT journal entries. Built with a modular architecture, it preserves your vault's folder structure, converts Obsidian-style `[[wikilinks]]` to native FoundryVTT journal links, handles both markdown and non-markdown files (including images), and offers advanced features like automatic index generation, backlink creation, and flexible content organization options including the ability to combine multiple notes into single journals or maintain one-journal-per-file structure.
+Obsidian Flux is a FoundryVTT module that imports your Obsidian vault directly into Foundry VTT journal entries. Built with a modular architecture, it preserves your vault's folder structure, converts Obsidian-style `[[wikilinks]]` to native FoundryVTT journal links, handles both markdown and non-markdown files (including images), and offers advanced features like automatic index generation, backlink creation, and flexible content organization options including the ability to combine multiple notes into single journals or maintain one-journal-per-file structure.
 
 If you’ve enjoyed my work and find value in what I create, please consider supporting me with a small donation on [Ko-fi](https://ko-fi.com/G2G3I91JQ). I truly love what I do, and your support helps me dedicate time and resources to ongoing development. Every contribution, no matter the size, makes a difference and allows me to continue doing what I’m passionate about. Thank you for considering—it means the world to me.
 
