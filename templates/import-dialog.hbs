@@ -27,6 +27,12 @@
         <input type="checkbox" name="playerObserve" id="{{idPrefix}}playerObserve" {{#if playerObserve}}checked{{/if}}>
     </div>
 
+    <div class="form-group" id="{{idPrefix}}excludeGMOnlyDiv" {{#unless playerObserve}}style="display: none;"{{/unless}}
+        title="Pages with 'gm-only: true' in frontmatter will remain hidden from players (GM only).">
+        <label>Except pages marked as 'gm-only'? <i class="far fa-question-circle"></i></label>
+        <input type="checkbox" name="excludeGMOnly" {{#if excludeGMOnly}}checked{{/if}}>
+    </div>
+
     <div class="form-group"
         title="Creates a journal that links to all journal entries, grouped by the first level of folders under the root. If it already exists, it updates it.">
         <label>Create/Update index journal? <i class="far fa-question-circle"></i></label>

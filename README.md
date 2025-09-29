@@ -47,11 +47,68 @@ You can install the latest released version of the module by using this manifest
 - **Image Support**: Import images with automatic resizing syntax conversion
 - **Index Generation**: Automatically create index pages for imported content
 - **Backlink Creation**: Generate backlink references between connected notes
-- **Player Permissions**: Control whether imported journals are visible to players
+- **Granular Permissions**: Control journal visibility per-page using frontmatter properties
 - **Overwrite Protection**: Options to overwrite existing content or skip duplicates
 - **HTML Conversion**: Optional TinyMCE HTML format conversion
 - **S3 Integration**: Support for AWS S3 storage for uploaded files
-- **Front Matter Handling**: Automatic removal of YAML front matter from imported notes
+- **Front Matter Handling**: Automatic parsing and removal of YAML front matter from imported notes
+
+## Permissions Control
+
+Obsidian Flux supports granular control over journal permissions using Obsidian frontmatter. Mark pages as GM-only or set specific permission levels directly in your markdown files.
+
+### Quick Example: GM-Only Pages
+
+```markdown
+---
+gm-only: true
+---
+# Secret Plot Information
+
+This page will only be visible to the GM, even when importing with "Give all players permission to observe?" enabled.
+```
+
+### Advanced Permission Levels
+
+For more control, use the `permission` property with FoundryVTT permission levels:
+
+```markdown
+---
+permission: none
+---
+# GM Only - Explicitly Hidden
+```
+
+```markdown
+---
+permission: limited
+---
+# Mysterious NPC - Limited Information
+```
+
+```markdown
+---
+permission: observer
+---
+# Public Knowledge - Full Access
+```
+
+```markdown
+---
+permission: owner
+---
+# Party Resources - Full Control
+```
+
+### Import Options
+
+When importing your vault:
+- **"Give all players permission to observe?"** - Makes all journals visible to players by default
+- **"Except pages marked as 'gm-only'?"** - Excludes pages with `gm-only: true` from player visibility
+
+### Learn More
+
+For complete documentation on permissions, examples, and best practices, see [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
 
 ## TODO
 - TBD

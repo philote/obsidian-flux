@@ -7,16 +7,16 @@ export class JournalManager {
    * Create a new journal entry
    * @param {string} journalName - Name for the journal
    * @param {Folder|null} parentFolder - Parent folder (optional)
-   * @param {boolean} playerObserve - Whether players can observe
+   * @param {number|null} permissionLevel - CONST.DOCUMENT_OWNERSHIP_LEVELS value or null for default
    * @param {Object} moduleFlags - Module flags for identification
    * @returns {Promise<JournalEntry>} Created journal entry
    */
-  static async createJournal(journalName, parentFolder, playerObserve, moduleFlags) {
+  static async createJournal(journalName, parentFolder, permissionLevel, moduleFlags) {
     const entryData = {
       name: journalName,
       folder: parentFolder?.id,
-      ...(playerObserve && {ownership:{default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER}})
-    };   
+      ...(permissionLevel !== null && permissionLevel !== undefined && {ownership:{default: permissionLevel}})
+    };
 
     const entry = (await JournalEntry.create(entryData)) ?? new JournalEntry();
     await entry.setFlag(moduleFlags.SCOPE, moduleFlags.JOURNAL, true);

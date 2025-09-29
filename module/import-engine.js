@@ -114,7 +114,9 @@ export class ImportEngine {
       folder.getFilesRecursive().filter((f) => f instanceof MDFileInfo).length > 0;
 
     if (combineFiles) {
-      parentJournal = await JournalManager.createJournal(folder.name, parentFolder, settings.playerObserve, moduleFlags);
+      // For combined folder journals, use global playerObserve setting
+      const permissionLevel = settings.playerObserve ? CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER : null;
+      parentJournal = await JournalManager.createJournal(folder.name, parentFolder, permissionLevel, moduleFlags);
     }
 
     if (
@@ -163,12 +165,18 @@ export class ImportEngine {
   static async importMarkdownFile(file, settings, parentFolder, parentJournal, moduleFlags) {
     const pageName = file.fileNameNoExt;
     const journalName = parentJournal?.name ?? pageName;
+
+    // Get content and metadata
+    const {content: fileContent, metadata} = await ImportEngine.getFileContent(file);
+    file.metadata = metadata;
+
+    // Calculate permission level for this file
+    const permissionLevel = ImportEngine.calculatePermissionLevel(metadata, settings);
+
     const journal =
       parentJournal ??
       JournalManager.findJournalByName(journalName, parentFolder) ??
-      (await JournalManager.createJournal(journalName, parentFolder, settings.playerObserve, moduleFlags));
-
-    const fileContent = await ImportEngine.getFileContent(file);
+      (await JournalManager.createJournal(journalName, parentFolder, permissionLevel, moduleFlags));
 
     let journalPage = JournalManager.findJournalPage(journal, pageName);
 
@@ -233,7 +241,9 @@ export class ImportEngine {
     }
     if (indexJournal != null) await JournalManager.updateJournalPage(indexJournal, content);
     else {
-      const journal = await JournalManager.createJournal(indexJournalName, rootFolder, settings.playerObserve, moduleFlags);
+      // Index file always uses global playerObserve setting
+      const permissionLevel = settings.playerObserve ? CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER : null;
+      const journal = await JournalManager.createJournal(indexJournalName, rootFolder, permissionLevel, moduleFlags);
       await JournalManager.createJournalPage(indexJournalName, content, journal);
     }
   }
@@ -248,16 +258,105 @@ export class ImportEngine {
   }
 
   /**
-   * Get file content with front matter removed
+   * Parse YAML frontmatter from file content
+   * @param {string} text - Raw file content
+   * @returns {Object} Object with {frontmatter, content}
+   */
+  static parseFrontmatter(text) {
+    const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---(\r?\n)+/;
+    const match = text.match(frontmatterRegex);
+
+    if (!match) {
+      return { frontmatter: {}, content: text };
+    }
+
+    const frontmatterText = match[1];
+    const content = text.slice(match[0].length);
+    const frontmatter = {};
+
+    // Simple YAML parser for basic key-value pairs
+    const lines = frontmatterText.split(/\r?\n/);
+    for (const line of lines) {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex === -1) continue;
+
+      const key = line.slice(0, colonIndex).trim();
+      let value = line.slice(colonIndex + 1).trim();
+
+      // Parse boolean values
+      if (value === 'true') value = true;
+      else if (value === 'false') value = false;
+      // Remove quotes from strings
+      else if ((value.startsWith('"') && value.endsWith('"')) ||
+               (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+
+      frontmatter[key] = value;
+    }
+
+    return { frontmatter, content };
+  }
+
+  /**
+   * Get file content with front matter removed and metadata extracted
    * @param {FileInfo} file - File to read
-   * @returns {Promise<string>} Processed content
+   * @returns {Promise<Object>} Object with {content, metadata}
    */
   static async getFileContent(file) {
     let originalText = await file.originalFile.text();
-    if (originalText !== null && originalText.length > 6)
-      originalText = originalText.replace(/^---\r?\n([^-].*\r?\n)+---(\r?\n)+/, '');
-    originalText = originalText.replace(/^#[0-9A-Za-z]+\b/gm, ' $&');
-    return originalText;
+    if (originalText === null || originalText.length < 6) {
+      return { content: '', metadata: {} };
+    }
+
+    const { frontmatter, content } = ImportEngine.parseFrontmatter(originalText);
+    const processedContent = content.replace(/^#[0-9A-Za-z]+\b/gm, ' $&');
+
+    return { content: processedContent, metadata: frontmatter };
+  }
+
+  /**
+   * Calculate the appropriate permission level for a journal entry
+   * @param {Object} metadata - Frontmatter metadata from the file
+   * @param {ObsidianFluxSettings} settings - Import settings
+   * @returns {number|null} Permission level constant or null for default
+   */
+  static calculatePermissionLevel(metadata, settings) {
+    // Priority 1: Explicit permission property
+    if (metadata.permission !== undefined) {
+      return ImportEngine.parsePermissionString(metadata.permission);
+    }
+
+    // Priority 2: GM-only property (when global setting allows and exclude option is checked)
+    if (settings.excludeGMOnly && metadata['gm-only'] === true) {
+      return CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE;
+    }
+
+    // Priority 3: Global playerObserve setting
+    if (settings.playerObserve) {
+      return CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
+    }
+
+    // Priority 4: Use Foundry default
+    return null;
+  }
+
+  /**
+   * Parse permission string to constant value
+   * @param {string|number} permission - Permission from frontmatter
+   * @returns {number} Permission level constant
+   */
+  static parsePermissionString(permission) {
+    if (typeof permission === 'number') return permission;
+
+    const permMap = {
+      'none': CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE,
+      'limited': CONST.DOCUMENT_OWNERSHIP_LEVELS.LIMITED,
+      'observer': CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER,
+      'owner': CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER
+    };
+
+    return permMap[permission.toLowerCase()] ?? CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
   }
 
   /**

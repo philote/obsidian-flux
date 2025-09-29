@@ -59,6 +59,7 @@ export class ObsidianFluxForm extends FormApplication {
     this.setToggle(`#${prefix}importNonMarkdown`, `#${prefix}nonMarkdownOptions`);
     this.setToggle(`#${prefix}useS3`, `#${prefix}s3Options`);
     this.setToggle(`#${prefix}combineNotes`, `#${prefix}combineNotesOptions`);
+    this.setToggle(`#${prefix}playerObserve`, `#${prefix}excludeGMOnlyDiv`);
 
     const vaultFilesID = `#${prefix}vaultFiles`;
     $(vaultFilesID).on('change', (event) => {

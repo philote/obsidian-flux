@@ -41,6 +41,7 @@ export class MDFileInfo extends FileInfo {
   constructor(file) {
     super(file);
     this.links = [];
+    this.metadata = {};
     this.createKeys(this.fileNameNoExt);
   }
 
