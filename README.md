@@ -44,6 +44,7 @@ You can install the latest released version of the module by using this manifest
 - **Link Conversion**: Automatically converts Obsidian `[[wikilinks]]` to FoundryVTT journal entry links
 - **Multi-Format Support**: Handles markdown files and non-markdown assets (images, PDFs, etc.)
 - **Flexible Organization**: Choose between combining notes into single journals or one-journal-per-file
+- **Selective Import**: Ignore specific directories to exclude reference materials or unnecessary content
 - **Image Support**: Import images with automatic resizing syntax conversion
 - **Index Generation**: Automatically create index pages for imported content
 - **Backlink Creation**: Generate backlink references between connected notes
@@ -109,6 +110,61 @@ When importing your vault:
 ### Learn More
 
 For complete documentation on permissions, examples, and best practices, see [docs/PERMISSIONS.md](docs/PERMISSIONS.md).
+
+## Selective Import - Ignore Directories
+
+Need to exclude reference materials, sourcebooks, or other content from your import? Obsidian Flux allows you to specify directories to ignore during import.
+
+### Usage
+
+In the import dialog, use the **"Ignore directories"** field to list directories you want to exclude (one per line):
+
+```
+reference-books
+sourcebooks
+assets/old
+campaign-archive/season-1
+```
+
+### How It Works
+
+- **One directory per line**: Simple, clear format
+- **Case-insensitive**: `Reference-Books` matches `reference-books`
+- **Exact matching**: Only matches complete directory names as path segments
+- **Nested paths supported**: Use `folder/subfolder` to ignore specific subdirectories
+- **Settings persist**: Your ignore list is saved between imports
+
+### Examples
+
+**Exclude reference materials:**
+```
+PHB
+DMG
+Monster-Manual
+```
+
+**Exclude old/archived content:**
+```
+archive
+old-campaigns
+drafts
+```
+
+**Exclude assets you manage separately:**
+```
+images/stock
+audio
+maps/source-files
+```
+
+### What Gets Ignored
+
+Any file whose path contains an ignored directory will be skipped. For example, if you ignore `reference-books`:
+
+- ✅ Ignored: `reference-books/PHB.md`
+- ✅ Ignored: `reference-books/spells/fireball.md`
+- ✅ Ignored: `campaign/reference-books/notes.md`
+- ❌ Not ignored: `my-reference-book.md` (not a directory match)
 
 ## TODO
 - TBD

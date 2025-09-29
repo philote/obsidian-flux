@@ -10,6 +10,7 @@ export class ObsidianFluxSettings {
     this.idPrefix = `${ObsidianFlux.ID}-`;
     this.playerObserve = false;
     this.excludeGMOnly = false;
+    this.ignoreDirectories = '';
     this.createIndexFile = false;
     this.createBacklinks = true;
     this.importNonMarkdown = true;

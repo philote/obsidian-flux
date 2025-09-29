@@ -33,7 +33,12 @@ export class ImportEngine {
 
       const rootFoundryFolder = await createOrGetFolder(settings.rootFolderName);
 
-      const rootFolder = ImportEngine.createFolderStructure(settings.vaultFiles);
+      // Parse ignoreDirectories from textarea string to array
+      const ignoreDirectories = settings.ignoreDirectories
+        ? settings.ignoreDirectories.split('\n').map(dir => dir.trim()).filter(dir => dir.length > 0)
+        : [];
+
+      const rootFolder = ImportEngine.createFolderStructure(settings.vaultFiles, ignoreDirectories);
       await ImportEngine.importFolder(rootFolder, settings, rootFoundryFolder, moduleFlags);
 
       const importedFiles = rootFolder.getFilesRecursive();
@@ -60,15 +65,40 @@ export class ImportEngine {
   }
 
   /**
+   * Check if a file is in an ignored directory
+   * @param {FileInfo} file - File to check
+   * @param {string[]} ignoreDirectories - Array of directory names/paths to ignore
+   * @returns {boolean} True if file should be ignored
+   */
+  static isInIgnoredDirectory(file, ignoreDirectories) {
+    if (!ignoreDirectories || ignoreDirectories.length === 0) return false;
+
+    const filePath = file.originalFile.webkitRelativePath.toLowerCase();
+
+    return ignoreDirectories.some(ignoredDir => {
+      const normalizedDir = ignoredDir.trim().toLowerCase();
+      if (!normalizedDir) return false;
+
+      // Check if the file path contains this directory as a path segment
+      // Match: "ignoredDir/..." or ".../ignoredDir/..."
+      return filePath.includes(`/${normalizedDir}/`) ||
+             filePath.startsWith(`${normalizedDir}/`);
+    });
+  }
+
+  /**
    * Create folder structure from FileList
    * @param {FileList} fileList - Files to process
+   * @param {string[]} ignoreDirectories - Array of directory names/paths to ignore
    * @returns {FolderInfo} Root folder structure
    */
-  static createFolderStructure(fileList) {
+  static createFolderStructure(fileList, ignoreDirectories = []) {
     const rootFolder = new FolderInfo('');
     for (let i = 0; i < fileList.length; i++) {
       const file = FileInfo.get(fileList[i]);
       if (file.isHidden() || file.isCanvas()) continue;
+      if (ImportEngine.isInIgnoredDirectory(file, ignoreDirectories)) continue;
+
       let parentFolder = rootFolder;
       for (let j = 0; j < file.directories.length; j++) {
         const folderName = file.directories[j];
